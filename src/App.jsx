@@ -1,36 +1,37 @@
+jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Contact from './Contact';
+
 const API_URL = 'https://portfolio-backend-black-rho.vercel.app/api';
 
 export default function App() {
   const [projects, setProjects] = useState([]);
-  const [formData, setFormData] = useState({name: "", email: "", message: ""});
-  const [loading, setLoading] = useState(false);
 
   // Static data for now - backend me later shift kar sakte ho
   const experience = [
-    {
-      role: "Full Stack Developer",
-      company: "Freelance / Global Clients",
-      year: "2023 - Present",
+    { 
+      role: "Full Stack Developer", 
+      company: "Freelance / Global Clients", 
+      year: "2023 - Present", 
       desc: "Built scalable web apps using React, Node.js, MongoDB for clients in US, UK, KSA."
     },
-    {
-      role: "Frontend Developer",
-      company: "Tech Agency",
-      year: "2022 - 2023",
+    { 
+      role: "Frontend Developer", 
+      company: "Tech Agency", 
+      year: "2022 - 2023", 
       desc: "Developed responsive UI components and integrated REST APIs."
     },
-     {
-      role: "Backend Developer",
-      company: "Tech company",
-      year: "2024 - 2025",
+    { 
+      role: "Backend Developer", 
+      company: "Tech company", 
+      year: "2024 - 2025", 
       desc: "Designed and developed Maryapp.io, a multi-vendor cannabis marketplace with session tracking and an integrated dashboard. Implemented an AI-powered chatbot using machine learning to enhance user support. Deployed and managed AWS infrastructure with monitoring via Grafana and CloudWatch. Built a scalable microservices architecture using Docker in a monorepo. Delivered a seamless end-to-end solution across frontend, backend, and DevOps pipelines for production deployment."
     }
   ];
 
   const skills = [
-    "React", "Next.js", "Node.js", "Express", "MongoDB", "PostgreSQL",
+    "React", "Next.js", "Node.js", "Express", "MongoDB", "PostgreSQL", 
     "AWS", "Docker", "Kubernetes", ".NET", "Tailwind CSS", "Redux"
   ];
 
@@ -49,52 +50,34 @@ export default function App() {
       console.error('Error fetching projects:', error);
       // Fallback static data if API fails
       setProjects([
-        {
-          title: "Maryapp",
-          type: "Full Stack",
-          typeColor: "text-cyan-400",
-          desc: "Multi-vendor marketplace with real-time tracking and AI chatbot.",
+        { 
+          title: "Maryapp", 
+          type: "Full Stack", 
+          typeColor: "text-cyan-400", 
+          desc: "Multi-vendor marketplace with real-time tracking and AI chatbot.", 
           tech: ["React", "Node.js", "MongoDB", "AWS", "Docker"],
         },
-        {
-          title: "Sundial Home",
-          type: "DevOps",
-          typeColor: "text-purple-400",
-          desc: "E-commerce platform with inventory management and CI/CD.",
+        { 
+          title: "Sundial Home", 
+          type: "DevOps", 
+          typeColor: "text-purple-400", 
+          desc: "E-commerce platform with inventory management and CI/CD.", 
           tech: ["React", "Node.js", "Kubernetes", "AWS", "PostgreSQL"],
         },
-        {
-          title: "Zed Live",
-          type: "Backend",
-          typeColor: "text-pink-400",
-          desc: "Live streaming platform with NFT integration.",
+        { 
+          title: "Zed Live", 
+          type: "Backend", 
+          typeColor: "text-pink-400", 
+          desc: "Live streaming platform with NFT integration.", 
           tech: [".NET", "React", "Redis", "Kafka"],
         }
       ]);
     }
   };
 
-  // Send Message API
-  const sendMessage = async (data) => {
-    try {
-      await axios.post(`${API_URL}/contact`, data);
-      alert("Message sent successfully!");
-      setFormData({name: "", email: "", message: ""});
-    } catch {
-      alert("Failed to send message");
-    }
-  };
-
   useEffect(() => {
     getProjects();
   }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    await sendMessage(formData);
-    setLoading(false);
-  };
 
   return (
     <div className="bg-[#0a0a0f] text-white">
@@ -190,20 +173,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contact */}
+            {/* Contact */}
       <section id="contact" className="py-20 px-6">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4">Contact Me</h2>
-          <div className="bg-[#12121a] border-gray-800 rounded-2xl p-8 mt-16">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <input type="text" placeholder="Your name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-[#1e1e2a] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400" required />
-              <input type="email" placeholder="your.email@example.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-[#1e1e2a] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400" required />
-              <textarea rows="5" placeholder="Your message..." value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-4 py-3 bg-[#1e1e2a] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400" required />
-              <button type="submit" disabled={loading} className="w-full py-3 bg-cyan-400 text-[#0a0a0f] font-semibold rounded-lg hover:bg-cyan-300 disabled:opacity-50" >
-                {loading? "Sending..." : "Send Message"}
-              </button>
-            </form>
-          </div>
+          <Contact API_URL={API_URL} />
         </div>
       </section>
 
