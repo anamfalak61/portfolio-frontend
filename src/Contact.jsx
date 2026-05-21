@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Contact({ API_URL }) {
+function Contact() {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -24,7 +24,10 @@ function Contact({ API_URL }) {
     setSuccess(false);
 
     try {
-      const res = await fetch(`${API_URL}/contact`, {
+      //  Sahi aur direct Backend URL yahan set kar diya hai (/api/contact ke sath)
+      const BACKEND_URL = "https://portfolio-backend-seven-amber.vercel.app/api/contact";
+
+      const res = await fetch(BACKEND_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +48,7 @@ function Contact({ API_URL }) {
           message: "",
         });
       } else {
-        setError(data.message || "Failed to send message");
+        setError(data.error || "Failed to send message");
       }
     } catch (err) {
       console.error("Frontend Fetch Error:", err);
@@ -66,7 +69,7 @@ function Contact({ API_URL }) {
       
       {success && (
         <p className="text-emerald-400 text-sm bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20">
-          Message sent successfully & Email triggered!
+          Message sent successfully & Email triggered! 
         </p>
       )}
 
