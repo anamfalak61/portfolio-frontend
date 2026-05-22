@@ -3,7 +3,7 @@ import axios from "axios";
 import Contact from "./Contact";
 
 // 1. UPDATED PRODUCTION URL (Vercel rewrite handle karega)
-const API_URL = "https://portfolio-backend-anamfalak61s-projects.vercel.app";
+const API_URL = "https://portfolio-backend-seven-amber.vercel.app";
 
 export default function App() {
   const [projects, setProjects] = useState([]);
@@ -54,7 +54,7 @@ export default function App() {
   // Get Projects Function
   const getProjects = async () => {
     try {
-      const response = await axios.get(`${API_URL}/projects`);
+      const response = await axios.get(`${API_URL}/api/projects`);
       setProjects(response.data);
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -209,7 +209,7 @@ export default function App() {
       <section id="contact" className={sectionClass}>
         <div className="max-w-2xl mx-auto">
           <h2 className={headingClass}>Contact Me</h2>
-          <Contact API_URL={API_URL} />
+          <Contact/>
         </div>
       </section>
 

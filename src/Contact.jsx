@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+// Backend URL
+const BACKEND_URL =
+  "https://portfolio-backend-seven-amber.vercel.app/api/contact";
+
 function Contact() {
   const [form, setForm] = useState({
     name: "",
@@ -9,7 +13,7 @@ function Contact() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false); // Success message handle karne k liye
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,9 +28,6 @@ function Contact() {
     setSuccess(false);
 
     try {
-      //  Sahi aur direct Backend URL yahan set kar diya hai (/api/contact ke sath)
-      const BACKEND_URL = "https://portfolio-backend-seven-amber.vercel.app/api/contact";
-
       const res = await fetch(BACKEND_URL, {
         method: "POST",
         headers: {
@@ -39,9 +40,7 @@ function Contact() {
 
       if (res.ok) {
         setSuccess(true);
-        alert(data.message || "Message sent successfully!");
-        
-        // Form khali karne ke liye
+
         setForm({
           name: "",
           email: "",
@@ -64,16 +63,17 @@ function Contact() {
       className="bg-[#12121a] border border-gray-800 rounded-2xl p-6 space-y-4"
     >
       {error && (
-        <p className="text-red-400 text-sm bg-red-500/10 p-3 rounded-lg border border-red-500/20">{error}</p>
-      )}
-      
-      {success && (
-        <p className="text-emerald-400 text-sm bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20">
-          Message sent successfully & Email triggered! 
+        <p className="text-red-400 text-sm">
+          {error}
         </p>
       )}
 
-      {/* Name */}
+      {success && (
+        <p className="text-emerald-400 text-sm">
+          Message sent successfully!
+        </p>
+      )}
+
       <input
         type="text"
         placeholder="Your Name"
@@ -81,10 +81,9 @@ function Contact() {
         onChange={(e) =>
           setForm({ ...form, name: e.target.value })
         }
-        className="w-full bg-[#1e1e2a] border border-gray-700 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-400"
+        className="w-full bg-[#1e1e2a] border border-gray-700 rounded-lg px-4 py-3 text-white"
       />
 
-      {/* Email */}
       <input
         type="email"
         placeholder="Your Email"
@@ -92,10 +91,9 @@ function Contact() {
         onChange={(e) =>
           setForm({ ...form, email: e.target.value })
         }
-        className="w-full bg-[#1e1e2a] border border-gray-700 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-400"
+        className="w-full bg-[#1e1e2a] border border-gray-700 rounded-lg px-4 py-3 text-white"
       />
 
-      {/* Message */}
       <textarea
         placeholder="Your Message"
         rows="5"
@@ -103,14 +101,13 @@ function Contact() {
         onChange={(e) =>
           setForm({ ...form, message: e.target.value })
         }
-        className="w-full bg-[#1e1e2a] border border-gray-700 rounded-lg px-4 py-3 text-white outline-none focus:border-cyan-400 resize-none"
+        className="w-full bg-[#1e1e2a] border border-gray-700 rounded-lg px-4 py-3 text-white"
       />
 
-      {/* Button */}
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-cyan-400 text-[#0a0a0f] font-semibold py-3 rounded-lg hover:opacity-90 transition-all disabled:opacity-50"
+        className="w-full bg-cyan-400 text-black font-semibold py-3 rounded-lg"
       >
         {loading ? "Sending..." : "Send Message"}
       </button>
