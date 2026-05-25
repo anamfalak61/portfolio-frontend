@@ -1,9 +1,5 @@
 import { useState } from "react";
 
-// Backend URL
-const BACKEND_URL =
-  "https://portfolio-backend-seven-amber.vercel.app/api/contact";
-
 function Contact() {
   const [form, setForm] = useState({
     name: "",
@@ -15,11 +11,20 @@ function Contact() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.message) {
       setError("Please fill all fields");
+      setSuccess(false);
+      return;
+    }
+
+    if (!validateEmail(form.email)) {
+      setError("Please enter a valid email address");
+      setSuccess(false);
       return;
     }
 
@@ -27,34 +32,24 @@ function Contact() {
     setError(null);
     setSuccess(false);
 
-    try {
-      const res = await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+    const recipientEmail = "anamfalak61@gmail.com";
+    const subject = encodeURIComponent(`Message from ${form.name}`);
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+    );
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+      recipientEmail
+    )}&su=${subject}&body=${body}`;
 
-      const data = await res.json();
-
-      if (res.ok) {
-        setSuccess(true);
-
-        setForm({
-          name: "",
-          email: "",
-          message: "",
-        });
-      } else {
-        setError(data.error || "Failed to send message");
-      }
-    } catch (err) {
-      console.error("Frontend Fetch Error:", err);
-      setError("Network error. Please try again.");
-    }
+    window.open(gmailUrl, "_blank");
 
     setLoading(false);
+    setSuccess(true);
+    setForm({
+      name: "",
+      email: "",
+      message: "",
+    });
   };
 
   return (
@@ -70,7 +65,7 @@ function Contact() {
 
       {success && (
         <p className="text-emerald-400 text-sm">
-          Message sent successfully!
+          Gmail compose opened with your message.
         </p>
       )}
 
@@ -110,6 +105,7 @@ function Contact() {
         className="w-full bg-cyan-400 text-black font-semibold py-3 rounded-lg"
       >
         {loading ? "Sending..." : "Send Message"}
+
       </button>
     </form>
   );
