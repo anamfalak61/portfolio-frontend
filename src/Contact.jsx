@@ -1,4 +1,7 @@
 import { useState } from "react";
+import axios from "axios";
+
+const API_URL = "https://portfolio-backend-seven-amber.vercel.app";
 
 function Contact() {
   const [form, setForm] = useState({
@@ -13,7 +16,7 @@ function Contact() {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.message) {
@@ -32,24 +35,21 @@ function Contact() {
     setError(null);
     setSuccess(false);
 
-    const recipientEmail = "anamfalak61@gmail.com";
-    const subject = encodeURIComponent(`Message from ${form.name}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
-    );
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
-      recipientEmail
-    )}&su=${subject}&body=${body}`;
-
-    window.open(gmailUrl, "_blank");
-
-    setLoading(false);
-    setSuccess(true);
-    setForm({
-      name: "",
-      email: "",
-      message: "",
-    });
+    try {
+      await axios.post(`${API_URL}/api/contact`, form);
+      setSuccess(true);
+      setForm({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (sendError) {
+      console.error(sendError);
+      setError("Unable to send message. Please try again later.");
+      setSuccess(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,7 +65,7 @@ function Contact() {
 
       {success && (
         <p className="text-emerald-400 text-sm">
-          Gmail compose opened with your message.
+          Message sent successfully. I will get back to you soon.
         </p>
       )}
 
