@@ -7,13 +7,19 @@ const API_URL = "https://portfolio-backend-seven-amber.vercel.app";
 
 export default function App() {
   const [projects, setProjects] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   // Reusable Classes
-  const sectionClass = "py-12 px-6";
+  const sectionClass = "py-10 sm:py-12 px-4 sm:px-6 lg:px-8";
   const containerClass = "max-w-6xl mx-auto";
-  const headingClass = "text-4xl font-bold text-center mb-8";
+  const headingClass = "text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8";
   const cardClass =
     "bg-[#12121a] border border-gray-800 rounded-2xl p-5 hover:border-cyan-400/50 transition-all";
+  const navLinkClass = (id) =>
+    `hover:text-white transition ${
+      activeSection === id ? "text-white border-b-2 border-cyan-400 pb-1" : "text-gray-300"
+    }`;
 
   // Experience Data
   const experience = [
@@ -90,25 +96,100 @@ export default function App() {
     getProjects();
   }, []);
 
-  return (
-    <div className="bg-[#0a0a0f] text-white">
-      {/* Hero */}
-      <section className="min-h-[85vh] flex items-center justify-center text-center relative px-6 pt-10 pb-10">
-        <div className="absolute w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(0,255,200,0.15)_0%,transparent_70%)] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+  useEffect(() => {
+    const sectionIds = ["home", "experience", "skills", "clients", "projects", "contact"];
+    const handleScroll = () => {
+      const currentScroll = window.scrollY + window.innerHeight / 3;
+      let currentSection = "home";
 
-        <div className="relative z-10 max-w-3xl">
-          <p className="text-gray-400 text-lg mb-2">Hello, I'm</p>
-          <h1 className="text-5xl md:text-7xl font-bold text-cyan-400 mb-3">Anam Falak</h1>
-          <h2 className="text-xl md:text-2xl text-gray-200 mb-4">Full Stack Developer</h2>
-          <p className="text-gray-400 leading-relaxed mb-6">
+      sectionIds.forEach((id) => {
+        const section = document.getElementById(id);
+        if (section && section.offsetTop <= currentScroll) {
+          currentSection = id;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div className="bg-[#0a0a0f] text-white overflow-x-hidden">
+      <header className="sticky top-0 z-30 bg-[#0a0a0f]/95 border-b border-gray-900 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+          <a href="#home" className="text-lg font-bold text-cyan-400">Anam</a>
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            <a href="#experience" className={navLinkClass("experience")}>
+              Experience
+            </a>
+            <a href="#skills" className={navLinkClass("skills")}>
+              Skills
+            </a>
+            <a href="#clients" className={navLinkClass("clients")}>
+              Clients
+            </a>
+            <a href="#projects" className={navLinkClass("projects")}>
+              Projects
+            </a>
+            <a href="#contact" className={navLinkClass("contact")}>
+              Contact
+            </a>
+          </nav>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            className="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-700 bg-[#12121a] px-3 py-2 text-sm text-gray-200 shadow-lg shadow-cyan-500/10 transition hover:bg-[#1e1e2a]"
+            aria-label="Toggle navigation"
+          >
+            <span className="sr-only">Toggle navigation</span>
+            {menuOpen ? (
+              <span className="inline-flex h-5 w-5 items-center justify-center">
+                <span className="block h-0.5 w-5 rotate-45 bg-gray-200"></span>
+                <span className="block h-0.5 w-5 -rotate-45 bg-gray-200 -mt-0.5"></span>
+              </span>
+            ) : (
+              <span className="inline-flex flex-col gap-1">
+                <span className="block h-0.5 w-5 bg-gray-200"></span>
+                <span className="block h-0.5 w-5 bg-gray-200"></span>
+                <span className="block h-0.5 w-5 bg-gray-200"></span>
+              </span>
+            )}
+          </button>
+        </div>
+        {menuOpen && (
+          <div className="md:hidden border-t border-gray-900 bg-[#0a0a0f]/95 px-4 py-3">
+            <div className="flex flex-col gap-3 text-sm text-gray-300">
+              <a href="#experience" onClick={() => setMenuOpen(false)} className={navLinkClass("experience")}>Experience</a>
+              <a href="#skills" onClick={() => setMenuOpen(false)} className={navLinkClass("skills")}>Skills</a>
+              <a href="#clients" onClick={() => setMenuOpen(false)} className={navLinkClass("clients")}>Clients</a>
+              <a href="#projects" onClick={() => setMenuOpen(false)} className={navLinkClass("projects")}>Projects</a>
+              <a href="#contact" onClick={() => setMenuOpen(false)} className={navLinkClass("contact")}>Contact</a>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Hero */}
+      <section id="home" className="min-h-screen md:min-h-[85vh] flex items-center justify-center text-center relative px-4 sm:px-6 lg:px-8 pt-10 pb-10">
+        <div className="absolute w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] md:w-[500px] md:h-[500px] bg-[radial-gradient(circle,rgba(0,255,200,0.15)_0%,transparent_70%)] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+
+        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 sm:px-0">
+          <p className="text-gray-400 text-base sm:text-lg mb-2">Hello, I'm</p>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-cyan-400 mb-3">Anam Falak</h1>
+          <h2 className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-4">Full Stack Developer</h2>
+          <p className="text-gray-400 leading-relaxed mb-6 text-sm sm:text-base">
             2+ years building scalable web applications for global clients.
           </p>
 
-          <div className="flex gap-4 justify-center flex-wrap">
-            <a href="#contact" className="px-7 py-3 bg-cyan-400 text-[#0a0a0f] font-semibold rounded-lg hover:-translate-y-1 transition-all">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="#contact" className="w-full sm:w-auto px-7 py-3 bg-cyan-400 text-[#0a0a0f] font-semibold rounded-lg hover:-translate-y-1 transition-all">
               Hire Me
             </a>
-            <a href="#projects" className="px-7 py-3 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400/10 transition-all">
+            <a href="#projects" className="w-full sm:w-auto px-7 py-3 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400/10 transition-all">
               View Work
             </a>
           </div>
@@ -117,7 +198,7 @@ export default function App() {
 
       {/* Experience */}
       <section id="experience" className={sectionClass}>
-        <div className={containerClass}>
+        <div className={`${containerClass} px-2 sm:px-0`}>
           <h2 className={headingClass}>Work Experience</h2>
           <div className="space-y-5">
             {experience.map((exp, i) => (
@@ -144,7 +225,7 @@ export default function App() {
           <h2 className={headingClass}>Skills</h2>
           <div className="flex flex-wrap gap-3 justify-center">
             {skills.map((skill, i) => (
-              <span key={i} className="px-5 py-2 bg-[#12121a] border border-gray-800 rounded-lg text-gray-300 hover:border-cyan-400/50 hover:text-cyan-400 transition-all">
+              <span key={i} className="px-4 py-2 bg-[#12121a] border border-gray-800 rounded-lg text-sm text-gray-300 hover:border-cyan-400/50 hover:text-cyan-400 transition-all">
                 {skill}
               </span>
             ))}
@@ -154,9 +235,9 @@ export default function App() {
 
       {/* Clients */}
       <section id="clients" className={sectionClass}>
-        <div className={containerClass}>
+        <div className={`${containerClass} px-2 sm:px-0`}>
           <h2 className={headingClass}>Clients</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             {clients.map((client, i) => (
               <div key={i} className={cardClass + " flex items-center justify-center"}>
                 <span className="text-2xl font-bold text-cyan-400">{client.logo}</span>
@@ -169,9 +250,9 @@ export default function App() {
 
       {/* Projects */}
       <section id="projects" className={`${sectionClass} bg-[#0c0c12]`}>
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-2 sm:px-0">
           <h2 className={headingClass}>Featured Projects</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
             {projects.map((p, i) => (
               <div key={i} className={cardClass + " hover:-translate-y-2"}>
                 {/* Safe logic for types & colors */}
@@ -207,9 +288,9 @@ export default function App() {
 
       {/* Contact Section */}
       <section id="contact" className={sectionClass}>
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto px-2 sm:px-0">
           <h2 className={headingClass}>Contact Me</h2>
-          <Contact/>
+          <Contact />
         </div>
       </section>
 
