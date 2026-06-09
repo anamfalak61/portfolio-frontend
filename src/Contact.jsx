@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://portfolio-backend-seven-amber.vercel.app";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 function Contact() {
   const [form, setForm] = useState({
@@ -36,7 +36,7 @@ function Contact() {
     setSuccess(false);
 
     try {
-      await axios.post(`${API_URL}/api/contact`, form);
+      await axios.post(`${API_URL}/contact`, form);
       setSuccess(true);
       setForm({
         name: "",
