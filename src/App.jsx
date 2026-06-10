@@ -3,7 +3,8 @@ import axios from "axios";
 import Contact from "./Contact";
 
 // 1. UPDATED PRODUCTION URL (Vercel rewrite handle karega)
-const API_URL = "https://portfolio-backend-seven-amber.vercel.app";
+const API_URL = process.env.REACT_APP_API_URL || "https://portfolio-backend-black-rho.vercel.app";
+console.log("API URL:", API_URL);
 
 export default function App() {
   const [projects, setProjects] = useState([]);

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL || "https://portfolio-backend-black-rho.vercel.app/";
+const API_URL = process.env.REACT_APP_API_URL || "https://portfolio-backend-black-rho.vercel.app";
+console.log("API URL:", API_URL);
 
 function Contact() {
   const [form, setForm] = useState({
